@@ -28,7 +28,15 @@ public class FileHasher {
 
 
             try (FileWriter notesWriter = new FileWriter(notes)) {
-                notesWriter.write("");
+                notesWriter.write("Hello, this is notes.txt and my name is Mateo :)");
+            }
+
+            try (FileWriter dataWriter = new FileWriter(notes)) {
+                notesWriter.write("I love data, I am data.");
+            }
+
+            try (FileWriter logWriter = new FileWriter(notes)) {
+                notesWriter.write("log, log, log, log, blog, fog, log.");
             }
 
             // TODO (FH-3): read each file back, print it, and write all three into Backup/backup.txt
