@@ -13,11 +13,7 @@ public class FileHasher {
             // TODO (FH-1): create the JavaFileSystem directory
 
             File directory = new File("JavaFileSystem");
-            if (directory.mkdir() == true) {
-                System.out.println("Directory made.");
-            } else {
-                System.out.println("The folder (JavaFileSystem) is already there");
-            }
+            directory.mkdir();
 
 
             // TODO (FH-2): create notes.txt, data.txt, log.txt and write a sentence into each
@@ -40,6 +36,41 @@ public class FileHasher {
             }
 
             // TODO (FH-3): read each file back, print it, and write all three into Backup/backup.txt
+
+            //try (BufferedReader reader = new BufferedReader(new FileReader(fileName)))
+            // ^^ from mini gpt
+
+            FileReader notesFileReader = new FileReader(notes);
+            BufferedReader notesReader = new BufferedReader(notesFileReader);
+            String notesString = notesReader.readLine();
+            notesReader.close();
+            System.out.println("Notes.txt: " + notesString);
+
+            FileReader dataFileReader = new FileReader(data);
+            BufferedReader dataReader = new BufferedReader(dataFileReader);
+            String dataString = notesReader.readLine();
+            dataReader.close();
+            System.out.println("Data.txt: " + dataString);
+
+            FileReader logFileReader = new FileReader(log);
+            BufferedReader logReader = new BufferedReader(logFileReader);
+            String logString = logReader.readLine();
+            logReader.close();
+            System.out.println("Notes.txt: " + logString);
+
+            File backupDirectory = new File(directory, "Backup");
+            backupDirectory.mkdir();
+
+            File backupFile = new File(backupDirectory, "backup.txt");
+            try (FileWriter backupWriter = new FileWriter(backupFile)) {
+                backupWriter.write(notesString + "\n");
+                backupWriter.write(dataString + "\n");
+                backupWriter.write(logString + "\n");
+                backupWriter.close();
+   
+            }
+
+
             // TODO (FH-4): print each file's name next to hashFile(path)
         } catch (IOException e) {
             System.out.println("File error: " + e.getMessage());
