@@ -24,18 +24,20 @@ public class FileHasher {
 
 
             try (FileWriter notesWriter = new FileWriter(notes)) {
-                notesWriter.write("Hello, this is notes.txt and my name is Mateo :)");
+                notesWriter.write("Hashing turns any content into a fixed-size fingerprint.");
             }
 
             try (FileWriter dataWriter = new FileWriter(notes)) {
-                notesWriter.write("I love data, I am data.");
+                notesWriter.write("Two different files essentially never share a SHA-256 hash.");
             }
 
             try (FileWriter logWriter = new FileWriter(notes)) {
-                notesWriter.write("log, log, log, log, blog, fog, log.");
+                notesWriter.write("Git names every object by the hash of its content.");
             }
 
             // TODO (FH-3): read each file back, print it, and write all three into Backup/backup.txt
+
+            System.out.println("--- Reading files back ---");
 
             //try (BufferedReader reader = new BufferedReader(new FileReader(fileName)))
             // ^^ from mini gpt
@@ -70,8 +72,16 @@ public class FileHasher {
    
             }
 
-
             // TODO (FH-4): print each file's name next to hashFile(path)
+
+            System.out.println("--- SHA-256 ---");
+            System.out.println("notes.txt  " + hashFile(notes.getPath()));
+            System.out.println("data.txt.  " + hashFile(data.getPath()));
+            System.out.println("log.txt    " + hashFile(log.getPath()));
+
+
+
+
         } catch (IOException e) {
             System.out.println("File error: " + e.getMessage());
         }
@@ -83,6 +93,25 @@ public class FileHasher {
      */
     public static String hashFile(String filePath) throws IOException {
         // TODO (FH-4): read the whole file, digest it, convert the bytes to hex
-        return "";
+
+        File testLegitimacy = new File(filePath);
+        if (!(testLegitimacy.exists())) {
+            throw new IOException("File path doesn't exist " + filePath);
+        }
+
+        byte[] fileBytes = java.nio.file.Files.readAllBytes(java.nio.file.Path.of(filePath));
+            // ^ from hub assignment code, gives bytes of string
+
+        try {
+            byte[] hash = MessageDigest.getInstance("SHA-256").digest(fileBytes);
+            String hexadecimal = "";
+            for (byte b : hash) {
+                hexadecimal = hexadecimal + String.format("%02x", b);
+            }
+
+            return hexadecimal;
+        } catch (Exception e) {
+            throw new IOException("Cannot hash the file.");
+        }
     }
 }
